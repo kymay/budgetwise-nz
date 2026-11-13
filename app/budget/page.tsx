@@ -84,7 +84,7 @@ export default function BudgetPage() {
     // Validation: check for empty or negative category limits
     for (const cat of categories) {
       if (cat.monthly_limit < 0) {
-        setError('Category "${cat.name}" cannot have a negative limit.');
+        setError(`Category "${cat.name}" cannot have a negative limit.`);
         return;
       }
     }
