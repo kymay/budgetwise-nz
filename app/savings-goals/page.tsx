@@ -138,7 +138,7 @@ export default function SavingsGoalsPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Emergency Fund"
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div>
@@ -153,7 +153,7 @@ export default function SavingsGoalsPage() {
               onChange={(e) => setTargetAmount(e.target.value)}
               placeholder="e.g. 5000"
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div>
@@ -167,7 +167,7 @@ export default function SavingsGoalsPage() {
               value={currentAmount}
               onChange={(e) => setCurrentAmount(e.target.value)}
               placeholder="e.g. 500"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div>
@@ -178,7 +178,7 @@ export default function SavingsGoalsPage() {
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div className="md:col-span-2 pt-2">

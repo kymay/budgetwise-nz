@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 const navLinks = [
   { name: "Dashboard", href: "/" },
@@ -13,7 +14,25 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setUserEmail(data.user?.email ?? null);
+    });
+  }, []);
+
+  // Grab the first letter of the email to use as an avatar initial
+  const initial = userEmail ? userEmail[0].toUpperCase() : "?";
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  }
 
   // Hide navigation on auth pages if necessary (e.g. login/signup)
   if (pathname === "/login" || pathname === "/signup") {
@@ -51,6 +70,24 @@ export default function Navbar() {
                 </Link>
               );
             })}
+          </div>
+
+          {/* Profile indicator and logout — desktop */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-semibold">
+                {initial}
+              </div>
+              {userEmail && (
+                <span className="text-sm text-gray-600 max-w-[160px] truncate">{userEmail}</span>
+              )}
+            </div>
+            <button
+              onClick={handleLogout}
+              className="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 transition"
+            >
+              Log out
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -108,6 +145,12 @@ export default function Navbar() {
               </Link>
             );
           })}
+          <button
+            onClick={handleLogout}
+            className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 transition"
+          >
+            Log out
+          </button>
         </div>
       )}
     </nav>
