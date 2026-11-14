@@ -109,7 +109,7 @@ export default function SavingsGoalsPage() {
         <h1 className="text-2xl font-bold text-gray-900">Savings Goals</h1>
         <p className="text-sm text-gray-500">
           Track progress toward specific financial targets like emergencies or
-          holidays[cite: 9].
+          holidays.
         </p>
       </div>
 
@@ -201,7 +201,7 @@ export default function SavingsGoalsPage() {
         {goals.length === 0 ? (
           <div className="bg-white p-8 text-center rounded-lg shadow border border-gray-100 text-gray-500">
             No savings goals found. Create your first goal above to start
-            tracking[cite: 9]!
+            tracking!
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
