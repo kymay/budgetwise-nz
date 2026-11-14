@@ -20,8 +20,8 @@ export async function GET() {
   }
 
   try {
-    // Fetch base income and user transactions concurrently
-    const [settingsResult, transactionsResult] = await Promise.all([
+    // Fetch income, transactions and category limits concurrently
+    const [settingsResult, transactionsResult, categoriesResult] = await Promise.all([
       supabase
         .from("user_settings")
         .select("monthly_income")
@@ -29,53 +29,43 @@ export async function GET() {
         .maybeSingle(),
       supabase
         .from("transactions")
-        .select("amount, type")
+        .select("amount, category")
+        .eq("user_id", user.id),
+      supabase
+        .from("budget_categories")
+        .select("name, monthly_limit")
         .eq("user_id", user.id),
     ]);
 
-    // Check for database errors
     if (settingsResult.error) {
-      return NextResponse.json(
-        { error: settingsResult.error.message },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: settingsResult.error.message }, { status: 500 });
     }
-
     if (transactionsResult.error) {
-      return NextResponse.json(
-        { error: transactionsResult.error.message },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: transactionsResult.error.message }, { status: 500 });
     }
 
-    // Extract monthly income (defautls to 0 if not set)
-    const monthlyIncome = settingsResult.data?.monthly_income ?? 0;
+    const monthly_income = settingsResult.data?.monthly_income ?? 0;
+    const transactions = transactionsResult.data ?? [];
+    const categoryLimits = categoriesResult.data ?? [];
 
-    // Calculate total expenses and total additional income
-    let totalExpenses = 0;
-    let totalAdditionalIncome = 0;
-
-    transactionsResult.data.forEach((tx) => {
+    // Negative amounts are expenses, positive are income
+    let total_expenses = 0;
+    transactions.forEach((tx) => {
       const amount = Number(tx.amount) || 0;
-      if (tx.type === "expense") {
-        totalExpenses += amount;
-      } else if (tx.type === "income") {
-        totalAdditionalIncome += amount;
-      }
+      if (amount < 0) total_expenses += Math.abs(amount);
     });
 
-    // Calculate net position
-    const netBalance = monthlyIncome + totalAdditionalIncome - totalExpenses;
+    const net_balance = monthly_income - total_expenses;
 
-    return NextResponse.json(
-      {
-        monthlyIncome: monthlyIncome,
-        totalAdditionalIncome: totalAdditionalIncome,
-        totalExpenses: totalExpenses,
-        netBalance: netBalance,
-      },
-      { status: 200 },
-    );
+    // Build per-category spending totals so the budget view can show progress bars
+    const categories = categoryLimits.map((cat) => {
+      const spent = transactions
+        .filter((tx) => tx.category === cat.name && Number(tx.amount) < 0)
+        .reduce((sum, tx) => sum + Math.abs(Number(tx.amount)), 0);
+      return { name: cat.name, monthly_limit: cat.monthly_limit, spent };
+    });
+
+    return NextResponse.json({ monthly_income, total_expenses, net_balance, categories }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to calculate balance totals." },

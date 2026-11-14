@@ -129,7 +129,7 @@ export default function BudgetPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md rounded-lg my-8">
-      <h1 className="text-2xl font-bold mb-2">Set Your Monthly Budget</h1>
+      <h1 className="text-2xl font-bold mb-2 text-gray-900">Set Your Monthly Budget</h1>
       <p className="text-gray-600 mb-6">
         Define your monthly income and allocate spending limits across your
         categories. This will help you track your expenses and stay within your
@@ -156,17 +156,17 @@ export default function BudgetPage() {
           <input
             type="number"
             min="0"
-            step="0.01"
+            step="1"
             value={monthlyIncome}
             onChange={(e) => setMonthlyIncome(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             placeholder="e.g. 3500"
           />
         </div>
 
         <hr className="my-4" />
 
-        <h2 className="text-lg font-semibold mb-3">Category Spending Limits</h2>
+        <h2 className="text-lg font-semibold mb-3 text-gray-900">Category Spending Limits</h2>
 
         {/* Category Inputs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -178,10 +178,11 @@ export default function BudgetPage() {
               <input
                 type="number"
                 min="0"
-                step="0.01"
-                value={cat.monthly_limit}
+                step="1"
+                value={cat.monthly_limit === 0 ? '' : cat.monthly_limit}
+                placeholder="0"
                 onChange={(e) => handleLimitChange(index, e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
               />
             </div>
           ))}

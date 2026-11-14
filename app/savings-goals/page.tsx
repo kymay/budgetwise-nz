@@ -108,8 +108,7 @@ export default function SavingsGoalsPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Savings Goals</h1>
         <p className="text-sm text-gray-500">
-          Track progress toward specific financial targets like emergencies or
-          holidays[cite: 9].
+          Track progress toward specific financial targets like emergencies or holidays.
         </p>
       </div>
 
@@ -138,7 +137,7 @@ export default function SavingsGoalsPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Emergency Fund"
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div>
@@ -153,7 +152,7 @@ export default function SavingsGoalsPage() {
               onChange={(e) => setTargetAmount(e.target.value)}
               placeholder="e.g. 5000"
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div>
@@ -167,7 +166,7 @@ export default function SavingsGoalsPage() {
               value={currentAmount}
               onChange={(e) => setCurrentAmount(e.target.value)}
               placeholder="e.g. 500"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div>
@@ -178,7 +177,7 @@ export default function SavingsGoalsPage() {
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
             />
           </div>
           <div className="md:col-span-2 pt-2">
@@ -200,8 +199,7 @@ export default function SavingsGoalsPage() {
         </h2>
         {goals.length === 0 ? (
           <div className="bg-white p-8 text-center rounded-lg shadow border border-gray-100 text-gray-500">
-            No savings goals found. Create your first goal above to start
-            tracking[cite: 9]!
+            No savings goals found. Create your first goal above to start tracking.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

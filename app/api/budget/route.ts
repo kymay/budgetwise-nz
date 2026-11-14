@@ -73,10 +73,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'monthly_income and categories are required' }, { status: 400 })
   }
 
-  // Save the user's income — the unique constraint on user_id means only one row per user
+  // upsert so this works on first save and on repeat saves without throwing a duplicate error
   const { error: settingsError } = await supabase
     .from('user_settings')
-    .insert({ user_id: user.id, monthly_income })
+    .upsert({ user_id: user.id, monthly_income }, { onConflict: 'user_id' })
 
   if (settingsError) {
     return NextResponse.json({ error: settingsError.message }, { status: 500 })
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
 
   const { data: createdCategories, error: categoriesError } = await supabase
     .from('budget_categories')
-    .insert(categoryRows)
+    .upsert(categoryRows, { onConflict: 'user_id,name' })
     .select()
 
   if (categoriesError) {
@@ -117,11 +117,9 @@ export async function PUT(request: Request) {
 
   // Update income if it was provided
   if (monthly_income !== undefined) {
-    // upsert = insert if not exists, update if it does — safe to call even on first setup
     const { error } = await supabase
       .from('user_settings')
-      .upsert({ user_id: user.id, monthly_income })
-      .eq('user_id', user.id)
+      .upsert({ user_id: user.id, monthly_income }, { onConflict: 'user_id' })
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
@@ -133,8 +131,7 @@ export async function PUT(request: Request) {
     for (const cat of categories) {
       const { error } = await supabase
         .from('budget_categories')
-        .upsert({ ...cat, user_id: user.id })
-        .eq('user_id', user.id)
+        .upsert({ ...cat, user_id: user.id }, { onConflict: 'user_id,name' })
 
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })
